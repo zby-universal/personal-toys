@@ -4,12 +4,11 @@
 忽略目录 -I ...
 `tree -I node_modules > tree.text && rm tree.text`
 
-.
+```text
 ├── LICENSE
 ├── README.md
-├── http
-│   └── user_server
-├── rpc
-│   ├── auth
-│   └── user_server
+├── server
+│   ├── http
+│   └── rpc
 └── web
+```
