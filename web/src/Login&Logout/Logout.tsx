@@ -3,14 +3,17 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { v4 as UUID } from "uuid";
 import AiStructrue from "../layouts/AiStructrue";
+import "./login.scss";
 
+let loadData = window.localStorage.getItem("loadData") ?? "";
+console.log("loadData", loadData);
+const parseloadData = loadData && JSON.parse(loadData);
 const Logout = () => {
   const [login, setLogin] = useState(false);
-
+  const [Remember, setRemember] = useState(parseloadData.Remember ?? false);
   const navigate = useNavigate();
-  const usernameRef = useRef<any>();
+  const accountRef = useRef<any>();
   const passwordRef = useRef<any>();
-
   const handleSubmit = (e: any) => {
     let userdata = {
       Nickname: "暗世尘",
@@ -23,12 +26,12 @@ const Logout = () => {
     console.log("nanoid", nanoid);
     console.log("userdata", userdata);
     e.preventDefault();
-    const username = usernameRef.current.input.value;
+    const account = accountRef.current.input.value;
     const password = passwordRef.current.input.value;
     //使用接口验证数据
     // axios({
     //   method: "GET",
-    //   url: `https://localhost/user/${username}`,
+    //   url: `https://localhost/user/${account}`,
     // }).then((response) => {
     //   if (response.data.password === password) {
     //     console.log("登录成功");
@@ -36,16 +39,30 @@ const Logout = () => {
     //   }
     // });
     //本地验证数据
-    if (username === "小猛子" && password === "xiaomengzi") {
+    if (account === "小猛子" && password === "xiaomengzi") {
       console.log("登录成功");
       setLogin(true);
     } else {
       console.log("用户名或密码错误");
-      console.log("username", username);
+      console.log("account", account);
       console.log("password", password);
     }
+    savePWD();
   };
+  //更改记住状态
+  const onRememberChange = () => {
+    setRemember(!Remember);
+  };
+  //保存账号密码
+  const savePWD = () => {
+    loadData = JSON.stringify({
+      account: accountRef.current.input.value,
+      password: passwordRef.current.input.value,
+      Remember: Remember,
+    });
 
+    localStorage.setItem("loadData", loadData);
+  };
   useEffect(() => {
     if (login) {
       console.log("登录成功,正在跳转界面");
@@ -68,11 +85,16 @@ const Logout = () => {
           autoComplete="off"
         >
           <Form.Item
-            label="Username"
-            name="username"
-            rules={[{ required: true, message: "Please input your username!" }]}
+            label="account"
+            name="account"
+            rules={[{ required: true, message: "Please input your account!" }]}
           >
-            <Input style={{ width: "20vw" }} ref={usernameRef} placeholder="username" />
+            <Input
+              className="loadInput"
+              ref={accountRef}
+              placeholder="account"
+              value={parseloadData.account ?? ""}
+            />
           </Form.Item>
 
           <Form.Item
@@ -81,15 +103,18 @@ const Logout = () => {
             rules={[{ required: true, message: "Please input your password!" }]}
           >
             <Input
-              style={{ width: "20vw" }}
+              className="loadInput"
               ref={passwordRef}
               type="password"
               placeholder="password"
+              value={parseloadData.password ?? ""}
             />
           </Form.Item>
 
           <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
-            <Checkbox>Remember me</Checkbox>
+            <Checkbox defaultChecked={Remember} onChange={onRememberChange}>
+              Remember me
+            </Checkbox>
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>

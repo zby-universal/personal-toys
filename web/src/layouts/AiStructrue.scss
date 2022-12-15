@@ -1,0 +1,20 @@
+
+.layout{
+  min-height: 100vh;
+  .header {
+    background-color: burlywood !important ;
+    .headerTitle{
+      text-align: center;
+      line-height: 100% ;
+    }
+  }
+  .content{}
+  .Footer{
+    background-color: blanchedalmond;
+    height: 10vh;
+    .headerContent{
+      text-align: center;
+      line-height: 100% ;
+    }
+  }
+}
