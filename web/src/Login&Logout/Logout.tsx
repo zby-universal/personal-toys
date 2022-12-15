@@ -1,18 +1,27 @@
 import { Button, Checkbox, Form, Input } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { v4 as UUID } from "uuid";
 import AiStructrue from "../layouts/AiStructrue";
 
 const Logout = () => {
   const [login, setLogin] = useState(false);
 
   const navigate = useNavigate();
-  console.log("navigate", navigate);
   const usernameRef = useRef<any>();
   const passwordRef = useRef<any>();
 
   const handleSubmit = (e: any) => {
-    console.log("e", e);
+    let userdata = {
+      Nickname: "暗世尘",
+      HeadImgID: "",
+      PersonalSign: "",
+      Phone: "15850678199",
+      Mail: "244317839@qq.com",
+    };
+    let nanoid = UUID();
+    console.log("nanoid", nanoid);
+    console.log("userdata", userdata);
     e.preventDefault();
     const username = usernameRef.current.input.value;
     const password = passwordRef.current.input.value;
