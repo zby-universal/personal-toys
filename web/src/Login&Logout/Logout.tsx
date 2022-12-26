@@ -1,16 +1,11 @@
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Form, Input } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { v4 as UUID } from "uuid";
 import AiStructrue from "../layouts/AiStructrue";
-import "./login.scss";
-
-let loadData = window.localStorage.getItem("loadData") ?? "";
-console.log("loadData", loadData);
-const parseloadData = loadData && JSON.parse(loadData);
+import "./index.scss";
 const Logout = () => {
   const [login, setLogin] = useState(false);
-  const [Remember, setRemember] = useState(parseloadData.Remember ?? false);
   const navigate = useNavigate();
   const accountRef = useRef<any>();
   const passwordRef = useRef<any>();
@@ -47,26 +42,13 @@ const Logout = () => {
       console.log("account", account);
       console.log("password", password);
     }
-    savePWD();
   };
-  //更改记住状态
-  const onRememberChange = () => {
-    setRemember(!Remember);
-  };
-  //保存账号密码
-  const savePWD = () => {
-    loadData = JSON.stringify({
-      account: accountRef.current.input.value,
-      password: passwordRef.current.input.value,
-      Remember: Remember,
-    });
-
-    localStorage.setItem("loadData", loadData);
+  const handleRegister = () => {
+    navigate("/register");
   };
   useEffect(() => {
     if (login) {
       console.log("登录成功,正在跳转界面");
-
       navigate("/login");
     } else {
       console.log("等待用户登录");
@@ -85,41 +67,26 @@ const Logout = () => {
           autoComplete="off"
         >
           <Form.Item
-            label="account"
+            label="账号"
             name="account"
             rules={[{ required: true, message: "Please input your account!" }]}
           >
-            <Input
-              className="loadInput"
-              ref={accountRef}
-              placeholder="account"
-              value={parseloadData.account ?? ""}
-            />
+            <Input className="loadInput" ref={accountRef} placeholder="account" />
           </Form.Item>
 
           <Form.Item
-            label="Password"
+            label="密码"
             name="password"
             rules={[{ required: true, message: "Please input your password!" }]}
           >
-            <Input
-              className="loadInput"
-              ref={passwordRef}
-              type="password"
-              placeholder="password"
-              value={parseloadData.password ?? ""}
-            />
+            <Input className="loadInput" ref={passwordRef} type="password" placeholder="password" />
           </Form.Item>
-
-          <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
-            <Checkbox defaultChecked={Remember} onChange={onRememberChange}>
-              Remember me
-            </Checkbox>
-          </Form.Item>
-
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
             <Button type="primary" htmlType="submit" onClick={handleSubmit}>
-              Submit
+              登录
+            </Button>
+            <Button className="registerButton" type="default" onClick={handleRegister}>
+              注册
             </Button>
           </Form.Item>
         </Form>
